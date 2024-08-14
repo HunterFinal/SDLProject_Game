@@ -1,21 +1,33 @@
-// libï¿½ï¿½ï¿½Jï¿½ï¿½
+#pragma once
+
+// ƒ‰ƒCƒuƒ‰ƒŠ‚ğŠJ‚­
 #pragma comment(lib,"Library/SDL2.lib")
 #pragma comment(lib,"Library/SDL2main.lib")
 
-#include <iostream>
-
 #include "SDL.h"
 
-#include "game_base.h"
+#include "shooter_2D.h"
 
 int main(int argc, char** argv)
 {
 	
+	IGame* game = new M2DShooter(1920,1080);
 
+	// ƒQ[ƒ€‚Ì‰Šú‰»‚ª¬Œ÷‚µ‚½‚çXVˆ—
+	if(game->InitializeGame())
+	{
+		// ƒQ[ƒ€XVˆ—
+		game->UpdateGame();
+	}
+	// ƒQ[ƒ€I—¹ˆ—
+	game->EndGame();
+
+	// ˆê’â~
 	{
 		system("pause");
 	}
 
+	delete game;
 
 	return 0;
 }

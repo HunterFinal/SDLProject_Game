@@ -3,20 +3,11 @@
 #include <iostream>
 
 #include "SDL.h"
-#include "window_params.h"
-
-GameBase::GameBase()
-    : _mainGameWindow(nullptr)
-    , _bIsInitialized(0)
-{
-    initSDLLib();
-    createGameWindow("Game",GAME_DEFAULT_WIDTH,GAME_DEFAULT_HEIGHT);
-    
-}
 
 GameBase::GameBase(const char* title, int width,int height)
     : _mainGameWindow(nullptr)
     , _bIsInitialized(0)
+    , _bIsRunning(0)
 {
     initSDLLib();
     createGameWindow(title,width,height);
@@ -27,7 +18,7 @@ GameBase::~GameBase()
 {
     if(_mainGameWindow)
     {
-        // ã‚²ãƒ¼ãƒ ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã‚’æ¶ˆæ»…
+        // ƒƒCƒ“ƒQ[ƒ€ƒEƒCƒ“ƒhƒE‚ðÁ–Å
         SDL_DestroyWindow(_mainGameWindow);
     }
 
@@ -45,15 +36,17 @@ void GameBase::initSDLLib()
 
 void GameBase::createGameWindow(const char *title, int width,int height)
 {
-    // SDLã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ
-    _mainGameWindow = SDL_CreateWindow( title
-                                        ,SDL_WINDOWPOS_CENTERED
-                                        ,SDL_WINDOWPOS_CENTERED
-                                        ,width
-                                        ,height
-                                        ,SDL_WINDOW_RESIZABLE);
+    // ƒƒCƒ“ƒQ[ƒ€ƒEƒCƒ“ƒhƒE‚ðì¬
+    _mainGameWindow = SDL_CreateWindow( 
+        title
+        ,SDL_WINDOWPOS_CENTERED
+        ,SDL_WINDOWPOS_CENTERED
+        ,width
+        ,height
+        ,SDL_WINDOW_RESIZABLE
+    );
 
-    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆå¤±æ•—ã—ãŸã‚‰
+    // ì¬Ž¸”s‚µ‚½‚ç
     if(!_mainGameWindow)
     {
         std::cout << SDL_GetError() << std::endl;

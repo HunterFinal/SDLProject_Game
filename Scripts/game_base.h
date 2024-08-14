@@ -4,33 +4,41 @@
 // Summary      : game base class
 // Update Msg   : create file : 2024/08/14 2:20
 // ----------------------------------------------------
-
 #pragma once
 
-//TODO temp
-using uint8 = uint8_t;
+#include "m_type_define.h"
 
-// forward declaration(å‰æ–¹å®£è¨€)
-class SDL_Window;
+#include "IGame.h"
 
-using GameWindow = SDL_Window;
+// forward declaration(‘O•ûéŒ¾)
+struct SDL_Window;
 
-class GameBase
+class GameBase : public IGame
 {
+    using GameWindow = SDL_Window;
+
 public:
-    GameBase();
     GameBase(const char* title,int width,int height);
-    ~GameBase();
+    virtual ~GameBase();
+
+public:
+    virtual bool InitializeGame()   = 0;
+    virtual void UpdateGame()       = 0;
+    virtual void EndGame()          = 0;
 
 protected:
-    virtual void Initialize()   = 0;
-    virtual void UpdateGame()   = 0;
-    virtual void EndGame()      = 0;
+    virtual void processInput()     = 0;    // ƒCƒ“ƒvƒbƒgˆ—
+    virtual void updateMainLogic()  = 0;    // ƒƒCƒ“ƒƒWƒbƒNˆ—
+    virtual void render()           = 0;    // ‰æ–Ê‚É•`‰æ
 
 private:
+    // SDLƒ‰ƒCƒuƒ‰ƒŠ‚ğ‰Šú‰»
     void initSDLLib();
+    // ƒƒCƒ“ƒQ[ƒ€ƒEƒCƒ“ƒhƒEì¬
     void createGameWindow(const char* title, int width, int height);
-private:
+
+protected:
     GameWindow* _mainGameWindow;    // Game main window
-    uint8 _bIsInitialized : 1;      // Is game initialized?
+    uint8 _bIsInitialized : 1;      // is game initialized?
+    uint8 _bIsRunning : 1;          // is game running?
 };
