@@ -1,30 +1,43 @@
+
+
 #pragma once
 
 #include "singleton.h"
 
 using MDesignPattern::MSingleton::Singleton;
  
-class MTime : public Singleton<MTime>
+namespace MSystem
 {
-    friend class Singleton<MTime>;
-private:
-    // 外部からのインスタンス作成禁止
-    MTime() = default;
+    class MTime : public Singleton<MTime>
+    {
+        // type alias
+        using MaxDeltaTime = float;
 
-public:
-    ~MTime() = default;
+        // friend class
+        friend class Singleton<MTime>;
+        
+    private:
+        // 外部からのインスタンス作成禁止
+        // デルタタイムの最大値をコンストラクタに渡す
+        MTime(const MaxDeltaTime);
+        ~MTime();
 
-private:
-    // copy disable
-    MTime(const MTime& other) = delete;
-    MTime& operator=(const MTime& other) = delete; 
+    private:
+        // copy disable
+        MTime(const MTime& other) = delete;
+        MTime& operator=(const MTime& other) = delete; 
 
-public:
-    void UpdateDeltaTime(const float deltaTime);
+    public:
+        void UpdateTime();
 
-private:
-    static float _sDeltaTime;
+    private:
+        float _deltaTime;
+        float _currentTime;
+        float _previousTime;
+        float _maxDeltaTime;
 
-public:
-    static float GetDeltaTime();  
-};
+    public:
+        float GetDeltaTime() const; 
+        float GetCurrentTime() const;
+    };
+}

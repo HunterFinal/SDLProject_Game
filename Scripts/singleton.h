@@ -13,24 +13,30 @@
 //                                  ~SingletonClass() = default;            // Destructor need to be public
 //                          }
 // Update:              2024/06/17  Create
+//                      2024/08/15  Change GetInstance to raw-pointer(it was shared_ptr before)
+//                                  Add Singleton GC(prevent memory leak if someone forget to release manually)
 //
 // Author:              MAI ZHICONG
 // ---------------------------------------------------------------------------------------------------------------------------------------
 
 #pragma once
 
-#include <memory>   // std::shared_ptr
+//#include <memory>   // std::shared_pt
+
+#include "thread_safe_def.h"
 
 namespace MDesignPattern
 {
     namespace MSingleton
     {
-        // ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³
+        // ƒVƒ“ƒOƒ‹ƒgƒ“
         template<typename T>
         class Singleton
         {
 
         private:
+            
+            // GC class
             class SingletonGC
             {
                 public:
@@ -38,37 +44,83 @@ namespace MDesignPattern
                     {
                         if(_instance)
                         {
-                            // TODO
-                            // Do implement
+                            // TODO need test
+                            delete _instance;
+                            _instance = nullptr;
                         }
                     }
             };
-        public:
-            static inline std::shared_ptr<T> GetInstance()
-            {
-                // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆã¯ä¸€å›ã—ã‹å®Ÿè¡Œã—ãªã„
-                static std::once_flag flag;
-                std::call_once(flag,[&]()
-                {
-                    _instance = std::shared_ptr<T>(new T);
-                });
 
-                return std::make_shared<T>(_instance);
+        public:
+            //
+            // smart pointer version
+            //
+            // static inline std::shared_ptr<T> GetInstance()
+            // {
+            //     // ƒCƒ“ƒXƒ^ƒ“ƒX¶¬‚Íˆê‰ñ‚µ‚©Às‚µ‚È‚¢
+            //     static std::once_flag flag;
+            //     std::call_once(flag,[&]()
+            //     {
+            //         _instance = std::shared_ptr<T>(new T);
+            //     });
+
+            //     return std::make_shared<T>(_instance);
+            // }
+            static inline T* GetInstance()
+            {
+                if(!_instance)
+                {
+                    LOCK(_padlock)
+                    if(!_instance)
+                    {
+                        _instance = new T();
+                    }
+                }
+
+                return _instance;
             }
 
+            static inline void ReleaseInstance()
+            {
+                if(_instance)
+                {
+                    delete _instance;
+                    _instance = nullptr;
+                }
+            }
+
+
         protected:
-            Singleton() {}
+            Singleton() = default;
+            virtual ~Singleton() = default;
 
         private:
             Singleton(const Singleton& other) = delete;
             Singleton& operator=(const Singleton& other) = delete;
 
+        //private:
+        //    void operator delete(void* ptr) noexcept
+        //    {
+        //        ((T*)ptr)->~T();
+        //        free(ptr);
+        //    }
+
         private:
-            static std::shared_ptr<T> _instance;
+            static T* _instance;
+            static std::mutex _padlock;
+            static SingletonGC _gcObj;
         };
 
+        // static member initialize
         template<typename T>
-        std::shared_ptr<T> Singleton<T>::_instance = nullptr;
+        T* Singleton<T>::_instance = nullptr;
+        template<typename T>
+        std::mutex Singleton<T>::_padlock;
+        // TODO
+        // need typename in front of it(tell compiler it is a type)
+        template<typename T>
+        typename Singleton<T>::SingletonGC Singleton<T>::_gcObj;
+
     }// namespace MSingleton
 
 }// namespace MDesignPattern

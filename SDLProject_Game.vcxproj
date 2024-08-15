@@ -150,12 +150,16 @@
     <ClCompile Include="Scripts\game_base.cpp" />
     <ClCompile Include="Scripts\main.cpp" />
     <ClCompile Include="Scripts\shooter_2D.cpp" />
+    <ClCompile Include="Scripts\time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\game_base.h" />
     <ClInclude Include="Scripts\interfaces\IGame.h" />
+    <ClInclude Include="Scripts\memory_release_def.h" />
     <ClInclude Include="Scripts\m_type_define.h" />
     <ClInclude Include="Scripts\shooter_2D.h" />
+    <ClInclude Include="Scripts\thread_safe_def.h" />
+    <ClInclude Include="Scripts\time.h" />
     <ClInclude Include="Scripts\window_params.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
