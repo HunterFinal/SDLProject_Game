@@ -5,6 +5,8 @@
 // Update Msg   : create file : 2024/08/14 19:04
 // ----------------------------------------------------
 
+#pragma once
+
 class IGame
 {
 public:
@@ -14,6 +16,8 @@ public:
     virtual void UpdateGame()       = 0;
     // Terminate game
     virtual void EndGame()          = 0;
+    // Is game running?
+    virtual bool IsRunning()        = 0;
 
 public:
     virtual ~IGame(){}

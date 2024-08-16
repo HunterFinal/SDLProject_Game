@@ -44,14 +44,9 @@ bool M2DShooter::InitializeGame()
 
 void M2DShooter::UpdateGame()
 {
-
-    while (_bIsRunning)
-    {
-        processInput();
-        updateMainLogic();
-        render();
-    }
-
+    processInput();
+    updateMainLogic();
+    render();
 }
 
 void M2DShooter::EndGame()

@@ -13,25 +13,25 @@
 
 int main(int argc, char** argv)
 {
-	
-	//IGame* game = new M2DShooter(1920,1080);
+	using MSystemTimer = MSystem::MTime;
+	IGame* game = new M2DShooter(1920,1080);
 
-	MTime* t = MTime::GetInstance();
-	float time = 3.f;
+	MSystemTimer::CreateInstance(0.05f);
+	MSystemTimer& t = MSystemTimer::GetInstance();
 
-	time = t->GetDeltaTime();
-
-	//t->ReleaseInstance();
-
-
-	//// ゲームの初期化が成功したら更新処理
-	//if(game->InitializeGame())
-	//{
-	//	// ゲーム更新処理
-	//	game->UpdateGame();
-	//}
-	//// ゲーム終了処理
-	//game->EndGame();
+	// ゲームの初期化が成功したら更新処理
+	if(game->InitializeGame())
+	{
+		while(game->IsRunning())
+		{
+			// Timer更新
+			t.UpdateTime();
+			// ゲーム更新処理
+			game->UpdateGame();
+		}
+	}
+	// ゲーム終了処理
+	game->EndGame();
 
 	//// 一時停止
 	//{

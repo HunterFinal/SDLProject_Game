@@ -10,8 +10,11 @@ namespace MSystem
 {
     class MTime : public Singleton<MTime>
     {
+
         // type alias
         using MaxDeltaTime = float;
+	    using Clock = std::chrono::steady_clock;
+        using Time = std::chrono::steady_clock::time_point; 
 
         // friend class
         friend class Singleton<MTime>;
@@ -32,9 +35,11 @@ namespace MSystem
 
     private:
         float _deltaTime;
-        float _currentTime;
-        float _previousTime;
         float _maxDeltaTime;
+
+        Time _currentTime;
+        Time _previousTime;
+        
 
     public:
         float GetDeltaTime() const; 

@@ -25,6 +25,7 @@ public:
     virtual bool InitializeGame()   = 0;
     virtual void UpdateGame()       = 0;
     virtual void EndGame()          = 0;
+    bool IsRunning() final { return _bIsRunning;};
 
 protected:
     virtual void processInput()     = 0;    // インプット処理

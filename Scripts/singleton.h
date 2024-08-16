@@ -8,9 +8,8 @@
 //                          {
 //                              friend class Singleton<SingletonClass>;
 //                              private:
-//                                  SingletonClass() = default;             // Constructor need to be private or protected
-//                              public:
-//                                  ~SingletonClass() = default;            // Destructor need to be public
+//                                  SingletonClass() = default;             // Constructor and Destructor need to be private or protected
+//                                  ~SingletonClass() = default;            
 //                          }
 // Update:              2024/06/17  Create
 //                      2024/08/15  Change GetInstance to raw-pointer(it was shared_ptr before)
@@ -24,6 +23,7 @@
 //#include <memory>   // std::shared_pt
 
 #include "thread_safe_def.h"
+#include <assert.h>
 
 namespace MDesignPattern
 {
@@ -33,7 +33,6 @@ namespace MDesignPattern
         template<typename T>
         class Singleton
         {
-
         private:
             
             // GC class
@@ -66,18 +65,29 @@ namespace MDesignPattern
 
             //     return std::make_shared<T>(_instance);
             // }
-            static inline T* GetInstance()
+
+            /// <summary>
+            /// シングルトンを初期化する
+            /// </summary>
+            /// <typeparam name="...Args">初期化子</typeparam>
+            /// <param name="...args"></param>
+            template<typename... Args>
+            static inline void CreateInstance(Args... args)
             {
-                if(!_instance)
+                if (!_instance)
                 {
                     LOCK(_padlock)
-                    if(!_instance)
+                    if (!_instance)
                     {
-                        _instance = new T();
+                        _instance = new T(args...);
                     }
                 }
+            }
+            static inline T& GetInstance()
+            {
+                assert(!_instance);
 
-                return _instance;
+                return *_instance;
             }
 
             static inline void ReleaseInstance()
