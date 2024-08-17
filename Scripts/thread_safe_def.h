@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef THREAD_SAVE
+#ifndef THREAD_SAVE || _THREAD_SAVE
 #define THREAD_SAVE
 
 #include <mutex>

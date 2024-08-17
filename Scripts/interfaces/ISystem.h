@@ -9,14 +9,24 @@
 
 namespace MFramework
 {
-    class ISystem
+    class IStaticSystem
+    {
+        public:
+            virtual void InitSystem()   = 0;
+            virtual void TermSystem()   = 0;
+        
+        public:
+            virtual ~IStaticSystem() { TermSystem();}
+    };
+
+    class IDynamicSystem
     {
         public:
             virtual void InitSystem()   = 0;
             virtual void UpdateSystem() = 0;
             virtual void TermSystem()   = 0;
         public:
-            virtual ~ISystem() { TermSystem(); }
+            virtual ~IDynamicSystem() { TermSystem(); }
     };
 }
 

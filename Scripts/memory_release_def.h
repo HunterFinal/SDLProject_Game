@@ -1,7 +1,7 @@
 #pragma once
 
 // メモリ安全解放
-#ifndef SAVE_RELEASE
+#ifndef SAVE_RELEASE || _SAVE_RELEASE
 #define SAVE_RELEASE
 
 #define SAVE_FREE(p) {if((p)!=nullptr){free(p);(p)=nullptr;}}
