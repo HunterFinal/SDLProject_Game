@@ -105,8 +105,8 @@ namespace MDesignPattern
             virtual ~Singleton() = default;
 
         private:
-            Singleton(const Singleton& other) = delete;
-            Singleton& operator=(const Singleton& other) = delete;
+            Singleton(const Singleton&) = delete;
+            Singleton& operator=(const Singleton&) = delete;
 
         //private:
         //    void operator delete(void* ptr) noexcept

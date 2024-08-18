@@ -1,44 +1,43 @@
 #include "framework.h"
 
+#include "time.h"
+
+#include "system_params.h"
+
+using namespace MSystem;
+
 namespace MFramework
 {
-
-    void Framework::RegisterStaticSystem(ConstString& name, IStaticSystem* system)
+    Framework::Framework()
+        : _time(nullptr)
     {
-        assert(!name.empty());
-        assert(system);
 
-        if(_staticSystems.contains(name))
-        {
-            //TODO pop error window
-            return;
-        }
-
-        _staticSystems.emplace(name,system);
     }
-    void Framework::RegisterDynamicSystem(ConstString& name, IDynamicSystem* system,const ESystemPriority priority)
+
+    Framework::~Framework()
     {
-        assert(!name.empty());
-        assert(system);
-        assert(priority != ESystemPriority::None);
-
-        auto& dynamicSystemTable = _dynamicSystems[priority];
-        if(dynamicSystemTable.contains(name))
-        {
-            //TODO pop error window
-            return;
-        }
-
-        dynamicSystemTable.emplace(name,system);
+        ShutDownFramework();
     }
+
+    bool Framework::InitFramework()
+    {
+        _time = new MTime(MAX_DELTATIME);
+        _time->StartUp();
+
+        return true;
+    }
+
     void Framework::UpdateFramework()
     {
-        for(auto& table : _dynamicSystems)
+
+    }
+    void Framework::ShutDownFramework() noexcept
+    {
+        if(_time)
         {
-            if(table.second.count() < 1)
-            {
-                
-            }
+            _time->ShutDown();
+            delete _time;
+            _time = nullptr;
         }
     }
 }

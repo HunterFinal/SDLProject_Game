@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\framework.cpp" />
     <ClCompile Include="Scripts\game_base.cpp" />
     <ClCompile Include="Scripts\main.cpp" />
     <ClCompile Include="Scripts\shooter_2D.cpp" />
@@ -156,8 +157,10 @@
     <ClInclude Include="Scripts\game_base.h" />
     <ClInclude Include="Scripts\interfaces\IGame.h" />
     <ClInclude Include="Scripts\memory_release_def.h" />
+    <ClInclude Include="Scripts\framework.h" />
     <ClInclude Include="Scripts\m_type_define.h" />
     <ClInclude Include="Scripts\shooter_2D.h" />
+    <ClInclude Include="Scripts\singleton.h" />
     <ClInclude Include="Scripts\thread_safe_def.h" />
     <ClInclude Include="Scripts\time.h" />
     <ClInclude Include="Scripts\window_params.h" />

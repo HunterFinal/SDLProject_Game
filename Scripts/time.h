@@ -1,37 +1,28 @@
-
-
 #pragma once
 
-#include "singleton.h"
+#include "m_type_define.h"
 
-using MDesignPattern::MSingleton::Singleton;
- 
 namespace MSystem
 {
-    class MTime : public Singleton<MTime>
+    class MTime
     {
-
         // type alias
         using MaxDeltaTime = float;
-	    using Clock = std::chrono::steady_clock;
-        using Time = std::chrono::steady_clock::time_point; 
-
-        // friend class
-        friend class Singleton<MTime>;
-        
-    private:
-        // 外部からのインスタンス作成禁止
-        // デルタタイムの最大値をコンストラクタに渡す
+        using Time = std::chrono::steady_clock::time_point;
+      
+    public:
         MTime(const MaxDeltaTime);
         ~MTime();
 
     private:
         // copy disable
-        MTime(const MTime& other) = delete;
-        MTime& operator=(const MTime& other) = delete; 
+        MTime(const MTime&) = delete;
+        MTime& operator=(const MTime&) = delete; 
 
     public:
+        void StartUp();
         void UpdateTime();
+        void ShutDown() noexcept;
 
     private:
         float _deltaTime;
@@ -39,7 +30,8 @@ namespace MSystem
 
         Time _currentTime;
         Time _previousTime;
-        
+
+        uint8 _isActive : 1;
 
     public:
         float GetDeltaTime() const; 

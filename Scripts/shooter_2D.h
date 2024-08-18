@@ -21,8 +21,8 @@ public:
 
 private:
     // copy disable(ÉRÉsÅ[ã÷é~)
-    M2DShooter(const M2DShooter& game) = delete;
-    M2DShooter& operator=(const M2DShooter& game) = delete;
+    M2DShooter(const M2DShooter&) = delete;
+    M2DShooter& operator=(const M2DShooter&) = delete;
 
 public:
     bool InitializeGame()   override;
