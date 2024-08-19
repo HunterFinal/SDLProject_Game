@@ -4,7 +4,6 @@
 
 #include "system_params.h"
 
-using namespace MSystem;
 
 namespace MFramework
 {
@@ -21,7 +20,7 @@ namespace MFramework
 
     bool Framework::InitFramework()
     {
-        _time = new MTime(MAX_DELTATIME);
+        _time = new MSystem::MTime(MAX_DELTATIME);
         _time->StartUp();
 
         return true;
@@ -29,7 +28,7 @@ namespace MFramework
 
     void Framework::UpdateFramework()
     {
-
+        _time->UpdateTime();
     }
     void Framework::ShutDownFramework() noexcept
     {
@@ -39,5 +38,11 @@ namespace MFramework
             delete _time;
             _time = nullptr;
         }
+    }
+    MSystem::MTime* Framework::GetTimeSystem()
+    {
+        assert(_time);
+
+        return _time;
     }
 }

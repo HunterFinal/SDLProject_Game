@@ -154,6 +154,7 @@
     <ClCompile Include="Scripts\time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\frameworkhelper.h" />
     <ClInclude Include="Scripts\game_base.h" />
     <ClInclude Include="Scripts\interfaces\IGame.h" />
     <ClInclude Include="Scripts\memory_release_def.h" />

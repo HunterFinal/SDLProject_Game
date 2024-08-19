@@ -2,6 +2,8 @@
 
 #include "SDL.h"    // include SDL_Renderer and SDL_Event
 
+#include "frameworkhelper.h"
+
 #include "window_params.h"
 
 M2DShooter::M2DShooter()
@@ -128,6 +130,7 @@ void M2DShooter::render()
         1920,
         THICKNESS
     };
+
 
     SDL_Rect ball
     {

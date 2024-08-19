@@ -83,11 +83,11 @@ namespace MDesignPattern
                     }
                 }
             }
-            static inline T& GetInstance()
+            static inline T* GetInstance()
             {
-                assert(!_instance);
+                assert(_instance);
 
-                return *_instance;
+                return _instance;
             }
 
             static inline void ReleaseInstance()

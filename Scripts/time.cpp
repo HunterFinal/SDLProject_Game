@@ -1,18 +1,16 @@
 #include "time.h"
 
-#include <thread>
-#include <chrono>
 #include <assert.h>
 
 namespace MSystem
 {
 	namespace
 	{
-		using Time = std::chrono::steady_clock::time_point;
+		using TimePoint = std::chrono::steady_clock::time_point;
 		using Clock = std::chrono::steady_clock;
 		using DurationF = std::chrono::duration<float>;
 
-		static Time System_Start_Time;
+		static TimePoint System_Start_Time;
 	}
 	MTime::MTime(const MaxDeltaTime maxDeltaTime)
 		: _deltaTime(0.f)

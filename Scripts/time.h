@@ -1,6 +1,11 @@
 #pragma once
 
+#ifndef M_TIME
+#define M_TIME
+
+#include <chrono>
 #include "m_type_define.h"
+
 
 namespace MSystem
 {
@@ -8,7 +13,7 @@ namespace MSystem
     {
         // type alias
         using MaxDeltaTime = float;
-        using Time = std::chrono::steady_clock::time_point;
+        using TimePoint = std::chrono::steady_clock::time_point;
       
     public:
         MTime(const MaxDeltaTime);
@@ -28,8 +33,8 @@ namespace MSystem
         float _deltaTime;
         float _maxDeltaTime;
 
-        Time _currentTime;
-        Time _previousTime;
+        TimePoint _currentTime;
+        TimePoint _previousTime;
 
         uint8 _isActive : 1;
 
@@ -38,3 +43,5 @@ namespace MSystem
         float GetCurrentTime() const;
     };
 }
+
+#endif
