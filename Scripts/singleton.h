@@ -19,11 +19,12 @@
 // ---------------------------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-
-//#include <memory>   // std::shared_pt
+#ifndef M_SINGLETON
+#define M_SINGLETON
+//#include <memory>   // std::shared_ptr
 
 #include "thread_safe_def.h"
-#include <assert.h>
+#include <atomic>
 
 namespace MDesignPattern
 {
@@ -41,11 +42,11 @@ namespace MDesignPattern
                 public:
                     ~SingletonGC()
                     {
-                        if(_instance)
+                        T* temp = _instance.load();
+                        if (temp != nullptr)
                         {
                             // TODO need test
-                            delete _instance;
-                            _instance = nullptr;
+                            delete temp;
                         }
                     }
             };
@@ -74,29 +75,55 @@ namespace MDesignPattern
             template<typename... Args>
             static inline void CreateInstance(Args... args)
             {
-                if (!_instance)
+                // TODO need understand atomic
+                T* instancePtr = _instance.load(std::memory_order_relaxed);
+                std::atomic_thread_fence(std::memory_order_acquire);
+
+                if (instancePtr == nullptr)
                 {
                     LOCK(_padlock)
-                    if (!_instance)
+                    instancePtr = _instance.load(std::memory_order_relaxed);
+
+                    if (instancePtr == nullptr)
                     {
-                        _instance = new T(args...);
-                    }
-                }
+                        instancePtr = new T(args...);
+                        std::atomic_thread_fence(std::memory_order_release);
+                        _instance.store(instancePtr,std::memory_order_relaxed);
+
+                        // atexit can register at least 32 functions
+                        // but......
+                        // limit is implementation-defined
+                        // so I can't use it in a template class
+
+                        // atexit(ReleaseInstance);
+
+                    } // end of second null check
+                } // end of first null check
             }
+
             static inline T* GetInstance()
             {
-                assert(_instance);
-
-                return _instance;
+                return _instance.load();
             }
 
             static inline void ReleaseInstance()
             {
-                if(_instance)
+                T* instancePtr = _instance.load(std::memory_order_relaxed);
+                std::atomic_thread_fence(std::memory_order_acquire);
+                if (instancePtr != nullptr)
                 {
-                    delete _instance;
-                    _instance = nullptr;
-                }
+                    LOCK(_padlock);
+                    instancePtr = _instance.load(std::memory_order_relaxed);
+
+                    if (instancePtr != nullptr)
+                    {
+                        delete instancePtr;
+                        instancePtr = nullptr;
+
+                        std::atomic_thread_fence(std::memory_order_release);
+                        _instance.store(instancePtr,std::memory_order_relaxed);
+                    } // end of second null check
+                } // end of first null check
             }
 
 
@@ -108,7 +135,7 @@ namespace MDesignPattern
             Singleton(const Singleton&) = delete;
             Singleton& operator=(const Singleton&) = delete;
 
-        //private:
+        // private:
         //    void operator delete(void* ptr) noexcept
         //    {
         //        ((T*)ptr)->~T();
@@ -116,14 +143,15 @@ namespace MDesignPattern
         //    }
 
         private:
-            static T* _instance;
+            static std::atomic<T*> _instance;
             static std::mutex _padlock;
+            // must place this under _instance
             static SingletonGC _gcObj;
         };
 
         // static member initialize
         template<typename T>
-        T* Singleton<T>::_instance = nullptr;
+        std::atomic<T*> Singleton<T>::_instance;
         template<typename T>
         std::mutex Singleton<T>::_padlock;
         // TODO
@@ -134,3 +162,5 @@ namespace MDesignPattern
     }// namespace MSingleton
 
 }// namespace MDesignPattern
+
+#endif

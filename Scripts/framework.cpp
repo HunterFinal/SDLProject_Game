@@ -4,6 +4,7 @@
 
 #include "system_params.h"
 
+#include <cassert>
 
 namespace MFramework
 {
@@ -20,7 +21,7 @@ namespace MFramework
 
     bool Framework::InitFramework()
     {
-        _time = new MSystem::MTime(MAX_DELTATIME);
+        _time = new MSystem::MTime(MAX_DELTA_TIME);
         _time->StartUp();
 
         return true;
