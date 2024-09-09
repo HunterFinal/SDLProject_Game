@@ -14,6 +14,7 @@
 // Update:              2024/06/17  Create
 //                      2024/08/15  Change GetInstance to raw-pointer(it was shared_ptr before)
 //                                  Add Singleton GC(prevent memory leak if someone forget to release manually)
+//                      2024/09/09  Change instance to atomic(thread save)
 //
 // Author:              MAI ZHICONG
 // ---------------------------------------------------------------------------------------------------------------------------------------
